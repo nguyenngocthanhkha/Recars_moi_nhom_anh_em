@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Biểu tượng xe dùng độc lập hoặc làm favicon. -->
+  <rect x="1" y="1" width="78" height="78" rx="16" fill="#F5F1E9" stroke="#D8CBB9"/>
+  <path d="m18 42 7-19h30l7 19v19H51V51H29v10H18V42Zm0 0h44M26 44h3M51 44h3" stroke="#B66D45" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

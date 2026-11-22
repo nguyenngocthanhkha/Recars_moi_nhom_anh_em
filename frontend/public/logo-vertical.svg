@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 190">
+  <!-- Logo dọc dùng cho trang bìa hoặc tài liệu thương hiệu. -->
+  <rect width="300" height="190" rx="16" fill="#F5F1E9"/>
+  <path d="m125 65 8-23h34l8 23v21h-12V75h-26v11h-12V65Zm0 0h50M134 67h3M163 67h3" fill="none" stroke="#B66D45" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <text x="150" y="125" fill="#343330" font-family="Arial,sans-serif" font-weight="700" font-size="23" text-anchor="middle">NHÓM ANH EM</text>
+  <text x="150" y="153" fill="#625E57" font-family="Arial,sans-serif" font-size="14" text-anchor="middle">ReCars · Car Rental Service</text>
+</svg>
