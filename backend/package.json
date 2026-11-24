@@ -1,0 +1,18 @@
+{
+  "name": "@recars/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env server.js",
+    "start": "node --env-file=.env server.js",
+    "seed": "node --env-file=.env scripts/seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mongoose": "^9.12.2",
+    "nodemailer": "^10.6.1",
+    "sepay-pg-node": "^1.0.0"
+  }
+}
