@@ -102,24 +102,73 @@ PATCH đơn: `{ "status": "cancelled" }` để hủy; Admin dùng `confirmed`, `
 
 Cookie HttpOnly vẫn được gửi cùng request HTTP; trình duyệt không đọc token bằng JavaScript. Một tài khoản có một phiên hoạt động; đăng nhập lại hoặc đổi mật khẩu làm token cũ không còn hợp lệ. Mật khẩu dùng scrypt + salt; chỉ hash được lưu. Token khôi phục chỉ nằm trong email, hash và hạn 15 phút nằm trong database, sử dụng được một lần.
 
-## Cấu hình VNPAY Sandbox
+#### HƯỚNG DẪN TẢI VÀ CHẠY DỰ ÁN RECARS- thử thanh toán đây nha 
 
-Điền trực tiếp trong `backend/.env`:
+## Bước 1. Chuẩn bị công cụ
 
-```dotenv
-VNPAY_TMN_CODE=
-VNPAY_HASH_SECRET=
-VNPAY_RETURN_URL=http://localhost:5000/api/payments/vnpay-return
+Cài đặt:
+- Node.js (nên sử dụng phiên bản LTS).
+- MongoDB Community Server.
+- Git (nếu muốn tải source bằng Git).
+
+## Bước 2. Tải source code
+
+1. Truy cập: https://github.com/nguyenngocthanhkha/Recars_moi_nhom_anh_em
+2. Chọn nhánh `main`.
+3. Nhấn Code → Download ZIP.
+4. Giải nén source code.
+
+## Bước 3. Cấu hình Backend
+
+1. Mở thư mục `backend`.
+2. Sao chép file `.env.example`.
+3. Đổi tên bản sao thành `.env`.
+4. Kiểm tra cấu hình MongoDB:
+
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017/recars
+PORT=5000
+CLIENT_ORIGIN=http://localhost:5173
+API_ORIGIN=http://localhost:5000
 ```
 
-Giữ trống đến khi có thông tin tài khoản thật do VNPAY cấp; không đưa secret vào frontend. URL IPN đăng ký với VNPAY là `https://<backend-cong-khai>/api/payments/vnpay-ipn`. VNPAY không thể gọi localhost trên máy bạn; cần backend công khai có HTTPS và cấu hình URL phù hợp. Hệ thống chưa được triển khai lên hosting.
+5. Điền các thông tin dịch vụ cần thiết nếu muốn sử dụng VNPAY, SePay hoặc SMTP.
 
-IPN kiểm tra merchant, HMAC-SHA512, số tiền và mã giao dịch. Return URL không tự xác nhận tiền. Callback được xử lý lặp an toàn; giao dịch đến sau hết hạn/hủy hoặc cọc trùng được lưu và đánh dấu đối soát, không tự giữ lại xe. Refund API chưa được triển khai; Admin xử lý hoàn tiền riêng.
+Không chia sẻ file `.env` lên GitHub.
 
-## Cấu hình SMTP và email nhóm
+## Bước 4. Chạy Backend
 
-Điền SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASSWORD, MAIL_FROM; thêm CONTACT_EMAIL để nhận liên hệ. Cổng 587 dùng STARTTLS (`SMTP_SECURE=false`), cổng 465 dùng TLS ngay (`SMTP_SECURE=true`). Không gửi khóa/mật khẩu qua chat. Chưa có cấu hình thì API báo 503; không có email giả hoặc reset token trả trực tiếp ra API.
+Mở Terminal tại thư mục `backend`, chạy:
 
+```bash
+npm install
+npm run dev
+```
+
+Giữ cửa sổ Terminal này hoạt động.
+
+## Bước 5. Chạy Frontend
+
+Mở một Terminal khác tại thư mục `frontend`, chạy:
+
+```bash
+npm install
+npm run dev
+```
+
+Sau khi chạy thành công, mở địa chỉ website được hiển thị trong Terminal (thường là http://localhost:5173).
+
+## Bước 6. Kiểm thử
+
+- Đăng ký, đăng nhập.
+- Xem danh sách xe.
+- Thử đặt thuê xe.
+- Kiểm tra các chức năng thanh toán.
+
+Lưu ý:
+- Mỗi máy sử dụng MongoDB riêng nên dữ liệu không tự đồng bộ giữa các thành viên.
+- Thanh toán SePay Sandbox cần cấu hình thông tin Sandbox và IPN URL công khai để nhận kết quả tự động.
+- Không sử dụng thông tin khóa bí mật của người khác khi chưa được cho phép.
 ## Kiểm thử
 
 `npm test`: kiểm tra công thức và 18 trường hợp API với database riêng. `npm run test:ui`: Chrome với backend và MongoDB riêng. Kiểm thử bao gồm tranh chấp cùng xe/tài xế, quyền sở hữu, callback giả/sai tiền/lặp/đến trễ, đổi và khôi phục mật khẩu, đánh giá trùng. SMTP được mock, IPN dùng chữ ký kiểm thử; cần xác minh giao dịch trên cổng VNPAY và SMTP thực tế sau khi cung cấp tài khoản.
