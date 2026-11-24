@@ -14,18 +14,42 @@ export default function usePayment({ id, params }) {
   const success = Boolean(order?.depositPaid);
   const pending = !success && order?.status === 'pending' && params.get('status') === 'pending';
   // Xin URL đã ký từ backend rồi chuyển trình duyệt sang cổng VNPAY.
-  const pay = async () => {
-    setConfirm(false);
-    setBusy(true);
-    setError('');
-    try {
-      const result = await api('/payments/checkout', { method: 'POST', body: { bookingId: id } });
-      window.location.assign(result.url);
-    } catch (err) {
+
+const pay = async () => {
+  setConfirm(false);
+  setBusy(true);
+  setError('');
+
+  try {
+    const result = await api('/payments/sepay-checkout', {
+      method: 'POST',
+      body: { bookingId: id },
+    });
+
+    if (!result.checkoutURL || !result.checkoutFormfields) {
+      throw new Error('Dữ liệu thanh toán SePay không hợp lệ.');
+    }
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = result.checkoutURL;
+    form.style.display = 'none';
+
+    Object.entries(result.checkoutFormfields).forEach(([name, value]) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = String(value);
+    form.appendChild(input);
+    });
+
+      document.body.appendChild(form);
+      form.submit();
+      }catch (err) {
       setError(err.message);
       setBusy(false);
-    }
-  };
+       }
+    };
   // Nút kiểm tra trạng thái chỉ tải lại dữ liệu, không tự đánh dấu đã thanh toán.
   const refreshStatus = async () => {
     try {
